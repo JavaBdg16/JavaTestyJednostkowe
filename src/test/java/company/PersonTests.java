@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 import static company.PersonAssertion.*;
+import static company.JunitCustomAssertions.assertPersonFullname;
 
 public class PersonTests {
 
@@ -11,8 +12,8 @@ public class PersonTests {
     public void equalityTest() {
 
         Person person1 = new Person("Jan", "Nowak");
-        // Person person2 = new Person("Jan", "Nowak");
-        Person person2 = person1;
+        Person person2 = new Person("Jan", "Nowak");
+        // Person person2 = person1;
 
         assertThat(person1).isEqualTo(person2);
 
@@ -23,6 +24,8 @@ public class PersonTests {
         assertThat(person1.getLastName()).isEqualTo("Nowak"); // assertEquals(person1.getLastName(), "Nowak");
 
         assertThat(person1).hasFullName("Jan", "Nowak");
-        assertThat(person2).hasFullName("Jan", "Nowakk");
+        //assertThat(person2).hasFullName("Jan", "Nowakk");
+
+        assertPersonFullname(person1, "Jan", "Nowakk");
     }
 }

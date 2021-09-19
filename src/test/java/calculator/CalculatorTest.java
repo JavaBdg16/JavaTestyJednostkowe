@@ -3,6 +3,7 @@ package calculator;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static company.JunitCustomAssertions.assertSomething;
 
 public class CalculatorTest {
 
@@ -50,5 +51,9 @@ public class CalculatorTest {
     @Nested
     public class NestedCalculatorTest {
 
+        @Test
+        public void testSomething() {
+            assertSomething(false);
+        }
     }
 }
