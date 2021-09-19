@@ -14,4 +14,13 @@ public class UserAuthenticationProvider {
 
         return user;
     }
+
+    public User register(String login, String passwors, String street) {
+
+        User user = new User();
+        user.setLogin(login);
+        user.setStreet(street);
+
+        return user;
+    }
 }
