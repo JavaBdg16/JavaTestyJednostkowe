@@ -16,6 +16,11 @@ public class Shop {
         }
 
         basket.addProduct(product);
+
+        if (true) {
+            basket.getBasketPrice();
+            basket.addProduct(product);
+        }
     }
 
     public boolean pay(double amount) throws Exception {
