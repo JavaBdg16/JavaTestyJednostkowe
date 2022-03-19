@@ -24,8 +24,12 @@ public class Shop {
     }
 
     public boolean pay(double amount) throws Exception {
-        if (basket.getBasketPrice() > amount) {
-            throw new PayMoreException();
+        try {
+            if (basket.getBasketPrice() > amount) {
+                throw new PayMoreException();
+            }
+        } catch (Exception ex) {
+            return false;
         }
 
         return true;

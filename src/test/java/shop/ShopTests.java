@@ -2,9 +2,9 @@ package shop;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.InOrder;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.*;
 
 public class ShopTests {
 
@@ -35,7 +35,12 @@ public class ShopTests {
 
         try {
             // Act
-            shop.addProductToBasket(new Product() {});
+            shop.addProductToBasket(new Product() {
+                @Override
+                public boolean setPrice(double price) {
+                    return true;
+                }
+            });
             Assertions.fail("Exception is expected");
         } catch (Exception e) {
             // Assert
@@ -65,7 +70,12 @@ public class ShopTests {
 
         try {
             // Act
-            shop.addProductToBasket(new Product() {});
+            shop.addProductToBasket(new Product() {
+                @Override
+                public boolean setPrice(double price) {
+                    return true;
+                }
+            });
             Assertions.fail("Exception is expected");
         } catch (Exception e) {
             // Assert
@@ -86,7 +96,12 @@ public class ShopTests {
 
         try {
             // Act
-            shop.addProductToBasket(new Product() {});
+            shop.addProductToBasket(new Product() {
+                @Override
+                public boolean setPrice(double price) {
+                    return true;
+                }
+            });
             Assertions.fail("Exception is expected");
         } catch (Exception e) {
             // Assert
@@ -167,8 +182,9 @@ public class ShopTests {
         }
     }
 
-    @Test
-    public void using_stub_when_user_pay_not_enough_money_then_exception() {
+    @ParameterizedTest
+    @ValueSource(doubles = {0.0, 10.0, 20.0, 30.0, 40.0})
+    public void using_stub_when_user_pay_not_enough_money_then_exception(double val) {
         // Arrange
         User user = new User() {
             @Override
@@ -193,7 +209,7 @@ public class ShopTests {
 
         try {
             // Act
-            boolean succes = shop.pay(50.0);
+            boolean succes = shop.pay(val);
             Assertions.fail("Exception is expected");
         } catch (Exception e) {
             // Assert
@@ -234,5 +250,54 @@ public class ShopTests {
         } catch (Exception e) {
             Assertions.fail("Exception is not expected");
         }
+    }
+
+    @Test
+    public void exception_test() {
+
+        // Arrange
+        User user = Mockito.mock(User.class);
+        Basket basket = Mockito.mock(Basket.class);
+
+        // BDDMockito.given(basket.getBasketPrice()).willThrow(new RuntimeException());
+        Mockito.when(basket.getBasketPrice()).thenThrow(new RuntimeException("Mocked exception"));
+
+        Shop shop = new Shop(user, basket);
+        try {
+            // Act
+            boolean success = shop.pay(50.0);
+
+            // Assert
+            Assertions.assertFalse(success);
+        } catch (Exception e) {
+            Assertions.fail("Exception is not expected");
+        }
+    }
+
+    @Test
+    public void multiple_value_test() {
+
+        Basket basket = Mockito.mock(Basket.class);
+        Mockito.when(basket.getBasketPrice()).thenReturn(100.0, 110.0, 120.0);
+
+        Assertions.assertEquals(basket.getBasketPrice(), 100.0);
+        Assertions.assertEquals(basket.getBasketPrice(), 110.0);
+        Assertions.assertEquals(basket.getBasketPrice(), 120.0);
+        Assertions.assertEquals(basket.getBasketPrice(), 120.0);
+    }
+
+    @Test
+    public void argument_matchers() {
+        Basket basket = Mockito.mock(Basket.class);
+        Mockito.when(basket.getBasketPrice()).thenReturn(100.0);
+
+        Product product = Mockito.mock(Product.class);
+        Mockito.when(product.setPrice(ArgumentMatchers.anyDouble())).thenReturn(true);
+        Mockito.when(product.setPrice(ArgumentMatchers.doubleThat(new ArgumentMatcher<Double>() {
+            @Override
+            public boolean matches(Double aDouble) {
+                return aDouble > 100;
+            }
+        })));
     }
 }
