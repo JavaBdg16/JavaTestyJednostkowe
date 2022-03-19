@@ -18,11 +18,11 @@ public class Shop {
         basket.addProduct(product);
     }
 
-    public void pay(double amount) throws Exception {
+    public boolean pay(double amount) throws Exception {
         if (basket.getBasketPrice() > amount) {
             throw new PayMoreException();
         }
 
-        // OK
+        return true;
     }
 }
