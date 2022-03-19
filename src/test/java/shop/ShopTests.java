@@ -39,4 +39,34 @@ public class ShopTests {
             Assertions.assertTrue(e instanceof UserCannotAddProductToBasketException);
         }
     }
+
+    @Test
+    public void when_concreteUser_cannot_add_to_basket_then_throws_eception() {
+
+        // Arrange
+        ConcreteUser user = new ConcreteUser(false);
+
+        Basket basket = new Basket() {
+            @Override
+            public void addProduct(Product product) {
+
+            }
+
+            @Override
+            public double getBasketPrice() {
+                return 0;
+            }
+        };
+
+        Shop shop = new Shop(user, basket);
+
+        try {
+            // Act
+            shop.addProductToBasket(new Product() {});
+            Assertions.fail("Exception is expected");
+        } catch (Exception e) {
+            // Assert
+            Assertions.assertTrue(e instanceof UserCannotAddProductToBasketException);
+        }
+    }
 }
