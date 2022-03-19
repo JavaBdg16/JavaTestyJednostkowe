@@ -5,6 +5,7 @@ import company.service.UserAuthenticationProvider;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static company.JunitCustomAssertions.*;
 
 public class UserAuthenticationTests {
 
@@ -26,5 +27,17 @@ public class UserAuthenticationTests {
         assertNotNull(user);
         assertEquals(user.getLogin(), "jnowk@op.pl");
         assertEquals(user.getStreet(), "adres");
+
+        // assertArrayEquals(user.getRoles(), new String[]{ "admin" });
+    }
+
+    @Test
+    public void adminRoleTest() {
+        UserAuthenticationProvider provider = new UserAuthenticationProvider();
+        User user = provider.login("admin", "pA$w0rD");
+
+        assertNotNull(user);
+        assertEquals(user.getLogin(), "admin");
+        // assertArrayContains(user.getRoles(), "admin");
     }
 }

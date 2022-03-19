@@ -15,7 +15,7 @@ public class UserAuthenticationProvider {
         return user;
     }
 
-    public User register(String login, String passwors, String street) {
+    public User register(String login, String password, String street) {
 
         User user = new User();
         user.setLogin(login);
